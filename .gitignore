@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Rust
+core/target/
+
+# Xcode (projet et plist générés par XcodeGen)
+ios/*.xcodeproj/
+ios/SupportFiles/Info.plist
+ios/build/
+ios/DerivedData/
+
+# Sorties de compilation
+build/
+*.ipa
+*.xcarchive
+
+# Fichiers de test locaux
+core/.tmp/

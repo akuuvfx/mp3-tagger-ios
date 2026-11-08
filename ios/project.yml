@@ -1,0 +1,59 @@
+name: MP3Tagger
+
+options:
+  bundleIdPrefix: com.beluga2500
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+  developmentLanguage: fr
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  MP3Tagger:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: MP3Tagger
+    info:
+      path: SupportFiles/Info.plist
+      properties:
+        CFBundleDisplayName: MP3 Tagger
+        CFBundleName: MP3Tagger
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.beluga2500.mp3tagger
+        PRODUCT_NAME: MP3Tagger
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_OBJC_BRIDGING_HEADER: MP3Tagger/MP3Tagger-Bridging-Header.h
+        LIBRARY_SEARCH_PATHS:
+          - "$(inherited)"
+          - "$(SRCROOT)/../core/target/aarch64-apple-ios/release"
+        OTHER_LDFLAGS:
+          - "$(inherited)"
+          - "-lmp3tag_core"
+        CODE_SIGN_STYLE: Automatic
+
+schemes:
+  MP3Tagger:
+    build:
+      targets:
+        MP3Tagger: all
+    run:
+      config: Debug
+    archive:
+      config: Release

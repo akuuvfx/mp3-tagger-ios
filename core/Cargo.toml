@@ -1,0 +1,21 @@
+[package]
+name = "mp3tag_core"
+version = "0.1.0"
+edition = "2021"
+description = "Cœur Rust de MP3 Tagger pour iOS (lecture/écriture ID3v2 + pochette)"
+
+[lib]
+name = "mp3tag_core"
+crate-type = ["staticlib", "rlib"]
+
+[dependencies]
+base64 = "0.22"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "webp"] }
+lofty = "0.21"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1

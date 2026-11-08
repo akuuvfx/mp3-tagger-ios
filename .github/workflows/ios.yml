@@ -1,0 +1,77 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-unsigned-ipa:
+    name: IPA non signée
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Toolchain Rust + cible iOS
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "core -> target"
+
+      - name: Compiler le cœur Rust
+        run: bash scripts/build-core.sh
+
+      - name: Installer XcodeGen
+        run: brew install xcodegen
+
+      - name: Générer le projet Xcode
+        run: |
+          cd ios
+          xcodegen generate
+
+      - name: Archiver l'app (non signée)
+        run: |
+          set -euo pipefail
+          cd ios
+          xcodebuild \
+            -project MP3Tagger.xcodeproj \
+            -scheme MP3Tagger \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/MP3Tagger.xcarchive" \
+            archive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM=""
+
+      - name: Empaqueter l'IPA
+        run: |
+          set -euo pipefail
+          APP="$RUNNER_TEMP/MP3Tagger.xcarchive/Products/Applications/MP3Tagger.app"
+          test -d "$APP"
+          mkdir -p "$RUNNER_TEMP/ipa/Payload"
+          cp -R "$APP" "$RUNNER_TEMP/ipa/Payload/"
+          cd "$RUNNER_TEMP/ipa"
+          zip -qry MP3Tagger-unsigned.ipa Payload
+          shasum -a 256 MP3Tagger-unsigned.ipa | tee MP3Tagger-unsigned.ipa.sha256
+          ls -lh MP3Tagger-unsigned.ipa
+
+      - name: Publier l'artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MP3Tagger-iOS-unsigned
+          path: |
+            ${{ runner.temp }}/ipa/MP3Tagger-unsigned.ipa
+            ${{ runner.temp }}/ipa/MP3Tagger-unsigned.ipa.sha256
+          if-no-files-found: error
