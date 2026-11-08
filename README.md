@@ -4,6 +4,17 @@ Port iOS de **MP3 Tagger** : une petite app iPhone pour éditer les tags ID3 d'u
 y intégrer une pochette, avant de l'envoyer à un distributeur ou de l'écouter dans Spotify
 (fichiers locaux), Apple Musique, VLC, etc.
 
+## Télécharger l'IPA
+
+- **IPA non signée (v1.0.0)** :
+  [MP3Tagger-1.0.0-unsigned.ipa](https://github.com/akuuvfx/mp3-tagger-ios/releases/download/ios-v1.0.0/MP3Tagger-1.0.0-unsigned.ipa)
+  (+ [SHA-256](https://github.com/akuuvfx/mp3-tagger-ios/releases/download/ios-v1.0.0/MP3Tagger-1.0.0-unsigned.ipa.sha256))
+- **Releases** : <https://github.com/akuuvfx/mp3-tagger-ios/releases>
+- **Builds** : onglet **Actions** du dépôt (workflow « Build iOS IPA »).
+
+⚠️ Cette IPA n'est pas signée : elle doit être re-signée avec ton Apple ID avant
+installation (voir [Installer l'IPA](#installer-lipa-non-signée)).
+
 ## Fonctionnalités
 
 - Ouvrir un MP3 depuis Fichiers (ou le partager vers l'app).
